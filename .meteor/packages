@@ -21,3 +21,4 @@ twbs:bootstrap
 check
 accounts-password
 accounts-ui
+fourseven:scss

@@ -1,13 +1,13 @@
 Meteor.methods({
-	addMessage(message, channelId, userId) {
+	addMessage(message, channelId, author) {
 		check(message, String);
 		check(channelId, String);
-		check(userId, String);
+		check(author, String);
 
 		Messages.insert({
 			content: message,
 			channelId: channelId,
-			userId: userId
+			author: author
 		});
 	}
 });

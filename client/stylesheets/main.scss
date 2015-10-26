@@ -1,0 +1,64 @@
+* {
+	box-sizing: border-box;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600);
+
+#main {
+	font-family: 'Source Sans Pro', sans-serif;
+	.container {
+		margin-top: 50px;
+	}
+}
+
+.clear-ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0
+}
+
+.channel-panel {
+	ul {
+		font-size: 22px;
+		font-weight: 300;
+		> li {
+			cursor: pointer;
+		}
+	}
+	> h3 {
+		font-weight: 600;
+	}
+}
+
+.messages-panel {
+	h1, h2, h3 {
+		margin: 0;
+		margin-bottom: 20px;
+	}
+	ul li {
+		font-size: 16px;
+		margin: 15px 0;
+	}
+}
+
+.channels-title {
+	margin-bottom: 20px;
+}
+
+.author {
+	font-weight: 600;
+}
+
+.message-form {
+	textarea {
+		resize: none;
+		width: 50%;
+		margin-right: 20px;
+		border: 1px solid #DDD;
+		padding: 10px;
+	}
+
+	button {
+		vertical-align: top;
+	}
+}

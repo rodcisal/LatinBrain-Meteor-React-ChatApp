@@ -30,14 +30,15 @@ App = React.createClass({
 				<div className="row">
 					<div className="container">
 						<div className="col-md-4 channel-panel">
-							<ul>
+							<div className="channels-title"> CHANNELS </div>
+							<ul className="clear-ul">
 								<ChannelsPanel channels={this.data.channels} onSelectChannel={this.setSelectedChannel}/>
 							</ul>
 						</div>
 						<div className="col-md-8 messages-panel">
 							<h3> {channel ? `#${channel.channelName}` : `Pick a Channel`} </h3>
 							<MessagesPanel messages={this.data.messages} />
-							<MessageForm onSubmitMessage={this.onSubmitMessage} channelId={channel ? channel.channelId : null}/>
+							{ channel ? <MessageForm onSubmitMessage={this.onSubmitMessage} channelId={channel ? channel.channelId : null}/> : null }
 						</div>
 					</div>
 				</div>
@@ -58,7 +59,7 @@ Channel = React.createClass({
 	},
 	render() {
 		return (
-			<li onClick={ this.selectChannel }> {this.props.channel.channelName} </li>
+			<li onClick={ this.selectChannel }> #{this.props.channel.channelName} </li>
 		);
 	}
 });
@@ -72,7 +73,7 @@ ChannelsPanel = React.createClass({
 
 	render() {
 		return (
-			<ul> { this.renderChannels() } </ul>
+			<ul className="clear-ul"> { this.renderChannels() } </ul>
 		)
 	}
 });
@@ -89,7 +90,7 @@ MessagesPanel = React.createClass({
 
 	render() {
 		return (
-			<ul> { this.renderMessages() } </ul>
+			<ul className="clear-ul"> { this.renderMessages() } </ul>
 		)
 	}
 });
@@ -98,7 +99,7 @@ MessagesPanel = React.createClass({
 Message = React.createClass({
 	render() {
 		return (
-			<li> {this.props.message.authorName()} says: { this.props.message.content } </li>
+			<li> <div className="author"> {this.props.message.author}:</div> { this.props.message.content } </li>
 		)
 	}
 });
@@ -108,15 +109,20 @@ MessageForm = React.createClass({
 	handleSubmit(event) {
 		event.preventDefault();
 		let text = this.refs.newMessage.getDOMNode().value.trim();
-		Meteor.call('addMessage', text, this.props.channelId, Meteor.userId());
+		Meteor.call('addMessage', text, this.props.channelId, Meteor.user().username);
 		this.refs.newMessage.getDOMNode().value = '';
+	},
+
+	handleKeyDown(event) {
+		if ( event.keyCode == 13 ) {
+			return this.handleSubmit(event);
+		}
 	},
 
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<textarea ref="newMessage" placeholder="Type to start chatting" />
-				<button type="submit"> Submit </button>
+			<form className="message-form" onSubmit={this.handleSubmit}>
+				<textarea ref="newMessage" placeholder="Type to start chatting" onKeyDown={this.handleKeyDown} />
 			</form>
 		)
 	}
