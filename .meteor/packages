@@ -19,3 +19,5 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 react
 twbs:bootstrap
 check
+accounts-password
+accounts-ui

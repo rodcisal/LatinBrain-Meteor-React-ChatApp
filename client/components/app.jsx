@@ -18,28 +18,35 @@ App = React.createClass({
 		let messagesSubscription = Meteor.subscribe( 'messages' );
 		return {
 			channels: Channels.find({}).fetch(),
-			messages: Messages.find({ channelId: this.state.selectedChannel }).fetch()
+			messages: Messages.find({ channelId: this.state.selectedChannel }).fetch(),
+			currentUser: Meteor.user()
 		}
 	},
 
 	render() {
 		const channel = Channels.findOne({channelId: this.state.selectedChannel});
-		return (
-			<div className="row">
-				<div className="container">
-					<div className="col-md-4 channel-panel">
-						<ul>
-							<ChannelsPanel channels={this.data.channels} onSelectChannel={this.setSelectedChannel}/>
-						</ul>
-					</div>
-					<div className="col-md-8 messages-panel">
-						<h3> {channel ? `#${channel.channelName}` : `Pick a Channel`} </h3>
-						<MessagesPanel messages={this.data.messages} />
-						<MessageForm onSubmitMessage={this.onSubmitMessage} channelId={channel ? channel.channelId : null}/>
+		if ( this.data.currentUser ) {
+			return (
+				<div className="row">
+					<div className="container">
+						<div className="col-md-4 channel-panel">
+							<ul>
+								<ChannelsPanel channels={this.data.channels} onSelectChannel={this.setSelectedChannel}/>
+							</ul>
+						</div>
+						<div className="col-md-8 messages-panel">
+							<h3> {channel ? `#${channel.channelName}` : `Pick a Channel`} </h3>
+							<MessagesPanel messages={this.data.messages} />
+							<MessageForm onSubmitMessage={this.onSubmitMessage} channelId={channel ? channel.channelId : null}/>
+						</div>
 					</div>
 				</div>
-			</div>
-		);
+			);
+		} else {
+			return (
+				<AccountsUIWrapper />
+			)
+		}
 	}
 });
 
@@ -114,3 +121,16 @@ MessageForm = React.createClass({
 		)
 	}
 })
+
+AccountsUIWrapper = React.createClass({
+  componentDidMount() {
+    this.view = Blaze.render(Template.loginButtons,
+     React.findDOMNode(this.refs.container));
+  },
+  componentWillUnmount() {
+    Blaze.remove(this.view);
+  },
+  render() {
+    return <span ref="container" />;
+  }
+});
