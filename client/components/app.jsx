@@ -106,6 +106,7 @@ Message = React.createClass({
 
 
 MessageForm = React.createClass({
+  
 	handleSubmit(event) {
 		event.preventDefault();
 		let text = this.refs.newMessage.getDOMNode().value.trim();
