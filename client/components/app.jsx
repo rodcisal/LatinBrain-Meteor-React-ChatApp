@@ -35,6 +35,7 @@ App = React.createClass({
 					<div className="col-md-8 messages-panel">
 						<h3> {channel ? `#${channel.channelName}` : `Pick a Channel`} </h3>
 						<MessagesPanel messages={this.data.messages} />
+						<MessageForm onSubmitMessage={this.onSubmitMessage} channelId={channel ? channel.channelId : null}/>
 					</div>
 				</div>
 			</div>
@@ -88,7 +89,6 @@ MessagesPanel = React.createClass({
 
 
 Message = React.createClass({
-
 	render() {
 		return (
 			<li> {this.props.message.author} says: { this.props.message.content } </li>
@@ -97,8 +97,20 @@ Message = React.createClass({
 });
 
 
+MessageForm = React.createClass({
+	handleSubmit(event) {
+		event.preventDefault();
+		let text = this.refs.newMessage.getDOMNode().value.trim();
+		Meteor.call('addMessage', text, this.props.channelId);
+		this.refs.newMessage.getDOMNode().value = '';
+	},
 
-
-
-
-
+	render() {
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<textarea ref="newMessage" placeholder="Type to start chatting" />
+				<button type="submit"> Submit </button>
+			</form>
+		)
+	}
+})
