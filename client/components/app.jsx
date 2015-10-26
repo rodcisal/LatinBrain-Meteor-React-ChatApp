@@ -98,7 +98,7 @@ MessagesPanel = React.createClass({
 Message = React.createClass({
 	render() {
 		return (
-			<li> {this.props.message.author} says: { this.props.message.content } </li>
+			<li> {this.props.message.authorName()} says: { this.props.message.content } </li>
 		)
 	}
 });
@@ -108,7 +108,7 @@ MessageForm = React.createClass({
 	handleSubmit(event) {
 		event.preventDefault();
 		let text = this.refs.newMessage.getDOMNode().value.trim();
-		Meteor.call('addMessage', text, this.props.channelId);
+		Meteor.call('addMessage', text, this.props.channelId, Meteor.userId());
 		this.refs.newMessage.getDOMNode().value = '';
 	},
 
